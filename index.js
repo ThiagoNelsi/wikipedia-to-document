@@ -2,6 +2,7 @@ const fs = require('fs')
 const userInput = require('./robots/user-input.js')
 const textRobot = require('./robots/text-robot.js')
 const docx_robot = require('./robots/save-into-docx.js')
+// const image_robot = require('./robots/image-robot.js')
 
 async function start() {
     
