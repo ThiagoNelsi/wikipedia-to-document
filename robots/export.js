@@ -1,7 +1,7 @@
 const docx = require('docx')
 const fs = require('fs')
 
-exports.writeDocx = content => {
+exports.exportDocx = content => {
     const doc = new docx.Document()
 
     addTitleAndAbstract()
@@ -111,6 +111,23 @@ exports.writeDocx = content => {
 
     }
     
+
+}
+
+
+exports.exportJSON = content => {
+
+    const jsonFileContent = {
+        searchTerm:content.searchTerm,
+        wikipediaOriginalContent:content.sourceContentOriginal,
+        sanitizedContent:content.sanitizedContent,
+        abstract:content.summarizedSourceContent,
+        imagesUrl: []
+    }
+
+    const file = JSON.stringify(jsonFileContent)
+
+    return fs.writeFileSync(`${content.searchTerm}/${content.searchTerm}.json`, file)
 
 }
 

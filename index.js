@@ -1,7 +1,7 @@
 const fs = require('fs')
 const userInput = require('./robots/user-input.js')
 const textRobot = require('./robots/text-robot.js')
-const docx_robot = require('./robots/save-into-docx.js')
+const export_robot = require('./robots/export.js')
 // const image_robot = require('./robots/image-robot.js')
 
 async function start() {
@@ -13,7 +13,8 @@ async function start() {
     await textRobot.robot(content)
     // console.log(content.sanitizedContent)
 
-    docx_robot.writeDocx(content)
+    export_robot.exportDocx(content)
+    export_robot.exportJSON(content)
 
 }
 
