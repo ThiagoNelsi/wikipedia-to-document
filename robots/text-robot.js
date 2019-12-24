@@ -1,6 +1,7 @@
 const sbd = require('sbd')
 const algorithmia = require('algorithmia')
-const algorithmiaAutenticated = algorithmia('simsI0aQp3wOl0rl5Vi1DblDRMt1')     // Retorna um instancia autenticada da API
+const algorithmiaApiKey = require('../credentials/algorithmia.json').ApiKey
+const algorithmiaAutenticated = algorithmia(algorithmiaApiKey)     // Retorna um instancia autenticada da API
 
 
 exports.robot = async content => {
