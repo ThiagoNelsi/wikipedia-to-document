@@ -1,3 +1,4 @@
+const sbd = require('sbd')
 const algorithmia = require('algorithmia')
 const algorithmiaAutenticated = algorithmia('simsI0aQp3wOl0rl5Vi1DblDRMt1')     // Retorna um instancia autenticada da API
 
@@ -6,8 +7,8 @@ exports.robot = async content => {
     
     await fetchWikipediaContent(content)
     sanitizeWikipediaContent(content)
-    await summarizeContent(content.sanitizedContent.join('\n'))
-    // breakContentIntoSentences()
+    await summarizeContent(content)
+    breakContentIntoSentences(content)
 
     async function fetchWikipediaContent(content) {
         const wikipediaAlgorithm = algorithmiaAutenticated.algo('web/WikipediaParser/0.1.2')
@@ -41,9 +42,25 @@ exports.robot = async content => {
 
     }
 
+    function breakContentIntoSentences(content) {
+        content.sentences = []
+        const textSentences = sbd.sentences(content.sanitizedContent.join('\n'))
+
+        textSentences.forEach((sentence) => {
+            content.sentences.push({
+                text:sentence,
+                keywords: [],
+                imagesUrl: []
+            })
+        })
+                                                  
+    }
 
 
-    async function summarizeContent(text) {
+
+    async function summarizeContent(content) {
+
+        const text = content.sanitizedContent.join('\n')
 
         const summarizerAlgorithm = algorithmiaAutenticated.algo('nlp/Summarizer/0.1.8')
         const summarizerAlgorithmResponse = await summarizerAlgorithm.pipe(text)

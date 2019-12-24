@@ -11,7 +11,7 @@ async function start() {
     content.searchTerm = userInput.askAndReturnSearchTerm()
     content.language = userInput.askAndReturnLanguage()
     await textRobot.robot(content)
-    console.log(content.sanitizedContent)
+    // console.log(content.sanitizedContent)
 
     docx_robot.writeDocx(content)
 
