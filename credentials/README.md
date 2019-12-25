@@ -8,7 +8,7 @@
 > 
 > ### Examples
 >
-> For the Algothmia API KEY there's a file "algorithmia.json". The content is:
+> For the Algorithmia API KEY there's a file "algorithmia.json". The content is:
 > ```
 > {
 >   "ApiKey":"The API KEY here (you need you own key)"
