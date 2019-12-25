@@ -11,8 +11,8 @@
 > For the Algorithmia API KEY there's a file "algorithmia.json". The content is:
 > ```
 > {
->   "ApiKey":"The API KEY here (you need you own key)"
+>   "ApiKey":"simsI0aQp3wOl0rl5Vi1DblDRMt1"
 > }
 > ```
 >
->
+> *This is a fake key, you need to get your own API KEY at the Algorithmia site.
