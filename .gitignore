@@ -1,6 +1,9 @@
 # Credentials
 credentials/*.json
 
+# Tests
+robots/test-watson.js
+
 # Logs
 logs
 *.log

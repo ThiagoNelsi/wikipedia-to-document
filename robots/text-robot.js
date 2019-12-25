@@ -1,7 +1,14 @@
 const sbd = require('sbd')
+
+// Algorithmia API
 const algorithmia = require('algorithmia')
 const algorithmiaApiKey = require('../credentials/algorithmia.json').ApiKey
 const algorithmiaAutenticated = algorithmia(algorithmiaApiKey)     // Retorna um instancia autenticada da API
+
+// Natural Language Understanding API
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+const { IamAuthenticator } = require('ibm-watson/auth');
+const nluCredentials = require('../credentials/nlu-watson.json')
 
 
 exports.robot = async content => {
@@ -10,8 +17,11 @@ exports.robot = async content => {
     sanitizeWikipediaContent(content)
     await summarizeContent(content)
     breakContentIntoSentences(content)
+    content.keywords = await getKeywordsFromTheSentences(content.summarizedSourceContent)
+
 
     async function fetchWikipediaContent(content) {
+
         const wikipediaAlgorithm = algorithmiaAutenticated.algo('web/WikipediaParser/0.1.2')
         const wikipediaResponse = await wikipediaAlgorithm.pipe({"articleName":content.searchTerm, "lang":content.language})
         const wikipediaContent =  wikipediaResponse.get()
@@ -48,11 +58,7 @@ exports.robot = async content => {
         const textSentences = sbd.sentences(content.sanitizedContent.join('\n'))
 
         textSentences.forEach((sentence) => {
-            content.sentences.push({
-                text:sentence,
-                keywords: [],
-                imagesUrl: []
-            })
+            content.sentences.push(sentence)
         })
                                                   
     }
@@ -70,5 +76,47 @@ exports.robot = async content => {
         content.summarizedSourceContent = summarizedContent
 
     }
+
+
+
+    function getKeywordsFromTheSentences(sentence) {
+
+
+        return new Promise((resolve, reject) => {
+
+
+            const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
+                version:"2019-07-12",
+                authenticator: new IamAuthenticator({
+                    apikey:nluCredentials.apikey
+                }),
+                url:nluCredentials.url
+            })
+
+            const analyzeParams = {
+                text:sentence,
+                features: {
+                    keywords: {}
+                }
+            }
+
+            naturalLanguageUnderstanding.analyze(analyzeParams, (err, response) => {
+                if(err) {
+                    reject(err)
+                    return
+                } else {
+                    const keywords = response.result.keywords.map((keyword) => {
+                        return keyword.text
+                    })
+                    resolve(keywords)
+                }
+            })
+
+
+        })
+
+
+    }
+
 
 }
