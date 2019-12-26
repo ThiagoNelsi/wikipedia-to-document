@@ -11,7 +11,7 @@ const { IamAuthenticator } = require('ibm-watson/auth');
 const nluCredentials = require('../credentials/nlu-watson.json')
 
 
-exports.robot = async content => {
+exports.text_robot = async content => {
     
     await fetchWikipediaContent(content)
     sanitizeWikipediaContent(content)

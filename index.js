@@ -10,7 +10,7 @@ async function start() {
 
     content.searchTerm = userInput.askAndReturnSearchTerm()
     content.language = userInput.askAndReturnLanguage()
-    await textRobot.robot(content)
+    await textRobot.text_robot(content)
     // console.log(content.sanitizedContent)
 
     export_robot.exportDocx(content)
