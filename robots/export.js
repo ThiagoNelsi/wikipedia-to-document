@@ -122,6 +122,7 @@ exports.exportJSON = content => {
         wikipediaOriginalContent:content.sourceContentOriginal,
         sanitizedContent:content.sanitizedContent,
         abstract:content.summarizedSourceContent,
+        keywords:content.keywords,
         imagesUrl: []
     }
 

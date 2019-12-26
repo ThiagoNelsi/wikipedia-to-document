@@ -2,7 +2,7 @@ const sbd = require('sbd')
 
 // Algorithmia API
 const algorithmia = require('algorithmia')
-const algorithmiaApiKey = require('../credentials/algorithmia.json').ApiKey
+const algorithmiaApiKey = require('../credentials/algorithmia.json').apikey
 const algorithmiaAutenticated = algorithmia(algorithmiaApiKey)     // Retorna um instancia autenticada da API
 
 // Natural Language Understanding API
