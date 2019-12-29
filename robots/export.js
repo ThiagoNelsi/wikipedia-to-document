@@ -86,17 +86,6 @@ exports.exportDocx = content => {
 
     function saveDocument() {
 
-        fs.mkdirSync(process.cwd() + '\\' + content.searchTerm, {recursive:true}, (err) => {
-            if(err) {
-
-                console.log('-------------------');
-                console.error(err);
-                console.log('-------------------');
-
-            }
-            
-        })
-
         docx.Packer.toBuffer(doc).then((buffer) => {
             fs.writeFileSync(`${content.searchTerm}/${content.searchTerm}.docx`, buffer, (err) => {
                 console.log('-------------------');
@@ -104,10 +93,6 @@ exports.exportDocx = content => {
                 console.log('-------------------');                            
             })
         })  
-
-        
-
-    
 
     }
     
@@ -129,6 +114,22 @@ exports.exportJSON = content => {
     const file = JSON.stringify(jsonFileContent)
 
     return fs.writeFileSync(`${content.searchTerm}/${content.searchTerm}.json`, file)
+
+}
+
+exports.createFolder = content => {
+
+    fs.mkdirSync(process.cwd() + `..\\${content.searchTerm}`, {recursive:true}, (err) => {
+        if(err) {
+            console.error(err);
+        }  
+    })
+
+    fs.mkdirSync(process.cwd() + `\\${content.searchTerm}\\images`, {recursive:true}, (err) => {
+        if(err) {
+            console.error(err);
+        }
+    })
 
 }
 

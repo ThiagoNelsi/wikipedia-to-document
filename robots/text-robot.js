@@ -13,11 +13,21 @@ const nluCredentials = require('../credentials/nlu-watson.json')
 
 exports.text_robot = async content => {
     
+    console.log('> [text-robot] Pesquisando conteúdo no wikipedia...')
     await fetchWikipediaContent(content)
+
+    console.log('> [text-robot] Limpando conteúdo...')
     sanitizeWikipediaContent(content)
+
+    console.log('> [text-robot] Resumindo conteúdo')
     await summarizeContent(content)
+    console.log('> [text-robot] Resumo: ' + content.summarizedSourceContent)
+
     breakContentIntoSentences(content)
+
+    console.log('> [text-robot] Identificando palavras-chave...')
     content.keywords = await getKeywordsFromTheSentences(content.summarizedSourceContent)
+    console.log('> [text-robot] Palavras-chave identificadas: ' + content.keywords)
 
 
     async function fetchWikipediaContent(content) {
@@ -46,7 +56,7 @@ exports.text_robot = async content => {
                 return true
             })
 
-            //console.log(whithoutBlankLinesAndMarkdowns.join('\n'));
+            
             return whithoutBlankLinesAndMarkdowns
 
         }
