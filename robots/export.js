@@ -123,7 +123,7 @@ exports.exportJSON = content => {
         sanitizedContent:content.sanitizedContent,
         abstract:content.summarizedSourceContent,
         keywords:content.keywords,
-        imagesUrl: []
+        imagesUrl: content.imagesUrl
     }
 
     const file = JSON.stringify(jsonFileContent)
