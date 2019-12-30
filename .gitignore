@@ -3,6 +3,7 @@ credentials/*.json
 
 # Tests
 robots/test-watson.js
+test.js
 
 # Logs
 logs
