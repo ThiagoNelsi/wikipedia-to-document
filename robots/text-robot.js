@@ -20,13 +20,12 @@ exports.text_robot = async content => {
     sanitizeWikipediaContent(content)
 
     console.log('> [text-robot] Resumindo conteúdo')
-    await summarizeContent(content)
+    await summarizeAllContent(content)
     console.log('> [text-robot] Resumo: ' + content.summarizedSourceContent)
 
-    breakContentIntoSentences(content)
 
     console.log('> [text-robot] Identificando palavras-chave...')
-    content.keywords = await getKeywordsFromTheSentences(content.summarizedSourceContent)
+    content.keywords = await getKeywordsFromTheText(content.summarizedSourceContent)
     console.log('> [text-robot] Palavras-chave identificadas: ' + content.keywords)
 
 
@@ -63,19 +62,9 @@ exports.text_robot = async content => {
 
     }
 
-    function breakContentIntoSentences(content) {
-        content.sentences = []
-        const textSentences = sbd.sentences(content.sanitizedContent.join('\n'))
-
-        textSentences.forEach((sentence) => {
-            content.sentences.push(sentence)
-        })
-                                                  
-    }
 
 
-
-    async function summarizeContent(content) {
+    async function summarizeAllContent(content) {
 
         const text = content.sanitizedContent.join('\n')
 
@@ -89,7 +78,7 @@ exports.text_robot = async content => {
 
 
 
-    function getKeywordsFromTheSentences(sentence) {
+    function getKeywordsFromTheText(text) {
 
 
         return new Promise((resolve, reject) => {
@@ -104,7 +93,7 @@ exports.text_robot = async content => {
             })
 
             const analyzeParams = {
-                text:sentence,
+                text:text,
                 features: {
                     keywords: {}
                 }

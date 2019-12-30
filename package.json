@@ -1,0 +1,29 @@
+{
+  "name": "wikipedia-content-getter",
+  "version": "1.0.0",
+  "description": "Projeto para pegar conteudo do wikipedia e formatá-lo em .docx",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoNelsi/Wikipedia-content-getter-and-formatter.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThiagoNelsi/Wikipedia-content-getter-and-formatter/issues"
+  },
+  "homepage": "https://github.com/ThiagoNelsi/Wikipedia-content-getter-and-formatter#readme",
+  "dependencies": {
+    "algorithmia": "^0.3.10",
+    "docx": "^5.0.0-rc7",
+    "fs": "0.0.1-security",
+    "googleapis": "^46.0.0",
+    "image-downloader": "^3.5.0",
+    "readline-sync": "^1.4.10",
+    "sbd": "^1.0.16",
+    "watson-developer-cloud": "^4.0.1"
+  }
+}
