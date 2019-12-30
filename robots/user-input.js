@@ -5,7 +5,7 @@ exports.askAndReturnSearchTerm = () => {
 }
 
 exports.askAndReturnLanguage = () => {
-    const languages = ['pt-PT', 'en', 'es-ES']
+    const languages = ['pt', 'en', 'es']
     const languageIndex = readline.keyInSelect(languages, 'Select an option: ')
     const languageText = languages[languageIndex]
     return languageText
