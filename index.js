@@ -11,14 +11,13 @@ async function start() {
     content.language = userInput.askAndReturnLanguage()
 
     await textRobot.text_robot(content)
-    console.log(content.sanitizedContent)
-    // await imageRobot(content)
+    await imageRobot(content)
 
-    // export_robot.createFolder(content)
-    // await imageRobot(content)
+    export_robot.createFolder(content)
+    await imageRobot(content)
 
-    // export_robot.exportDocx(content)
-    // export_robot.exportJSON(content)
+    export_robot.exportDocx(content)
+    export_robot.exportJSON(content)
 
 }
 

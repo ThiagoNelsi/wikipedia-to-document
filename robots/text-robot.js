@@ -42,6 +42,12 @@ exports.text_robot = async content => {
     
     }
 
+    function sanitizeWikipediaContent(content) {
+        content.sanitizedContent = removeBlankLines(content.sourceContentOriginal.split('\n'))
+        content.sanitizedContent = removeMarkdowns(content.sanitizedContent)
+    }
+
+
     function breakContentIntoSessions(content) {
 
         content.sessions = []
@@ -73,44 +79,26 @@ exports.text_robot = async content => {
             }
     
         }
-    
-        function removeMarkdowns(text) {
-            return text.split('=').join('').trim()
-        }
-
-        function removeBlankLines(text) {
-            const lines = text.filter((line) => {
-                if(line.trim().length === 0) {
-                    return false
-                }
-                return true
-            })
-            return lines
-        }
-    
     }
 
-    function sanitizeWikipediaContent(content) {
+    function removeBlankLines(text) {
+        const lines = text.filter((line) => {
+            if(line.trim().length === 0) {
+                return false
+            }
+            return true
+        })
+        return lines
+    }
 
-        content.sanitizedContent = removeBlankLinesAndMarkdowns(content.sourceContentOriginal)
+    function removeMarkdowns(text) {
+        const withoutMarkdowns = []
 
-        function removeBlankLinesAndMarkdowns(text) {
-
-            const allLines = text.split('\n')
-
-            const whithoutBlankLinesAndMarkdowns = allLines.filter((line) => {
-                if(line.trim().length === 0 || line.trim()[0] === "=") {
-                    return false
-                } 
-
-                return true
-            })
-
-            
-            return whithoutBlankLinesAndMarkdowns
-
+        for(let i in text) {
+            withoutMarkdowns.push(text[i].split('=').join('').trim())
         }
 
+        return withoutMarkdowns
     }
 
 
