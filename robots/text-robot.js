@@ -21,8 +21,6 @@ exports.text_robot = async content => {
 
     console.log('> [text-robot] Quebrando texto em sessões...')
     breakContentIntoSessions(content)
-    console.log(content.sessions)
-    process.exit(0)
 
     console.log('> [text-robot] Resumindo conteúdo')
     await summarizeAllContent(content)
