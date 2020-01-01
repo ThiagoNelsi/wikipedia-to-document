@@ -11,7 +11,7 @@ const { IamAuthenticator } = require('ibm-watson/auth');
 const nluCredentials = require('../credentials/nlu-watson.json')
 
 
-exports.text_robot = async content => {
+async function robot(content) {
     
     console.log('> [text-robot] Pesquisando conteúdo no wikipedia...')
     await fetchWikipediaContent(content)
@@ -24,12 +24,12 @@ exports.text_robot = async content => {
 
     console.log('> [text-robot] Resumindo conteúdo')
     await summarizeAllContent(content)
-    console.log('> [text-robot] Resumo: ' + content.summarizedSourceContent)
 
 
     console.log('> [text-robot] Identificando palavras-chave...')
-    content.keywords = await getKeywordsFromTheText(content.summarizedSourceContent)
-    console.log('> [text-robot] Palavras-chave identificadas: ' + content.keywords)
+    for(let session in content.sessions) {
+        content.sessions[session].keywords = await getKeywordsFromTheText(content.sessions[session].text)
+    }
 
 
     async function fetchWikipediaContent(content) {
@@ -45,6 +45,7 @@ exports.text_robot = async content => {
     function sanitizeWikipediaContent(content) {
         content.sanitizedContent = removeBlankLines(content.sourceContentOriginal.split('\n'))
         content.sanitizedContent = removeMarkdowns(content.sanitizedContent)
+        console.log(content.sanitizedContent)
     }
 
 
@@ -62,7 +63,7 @@ exports.text_robot = async content => {
             if(content.lines[i].trim()[0] === '=') {
     
                 session = {
-                    titulo:removeMarkdowns(content.lines[i].trim()),
+                    title:removeMarkdowns([content.lines[i].trim()]).join(),
                     text:[]
                 }
                 
@@ -119,6 +120,9 @@ exports.text_robot = async content => {
 
     function getKeywordsFromTheText(text) {
 
+        if(text.length === 0){
+            return ''
+        }
 
         return new Promise((resolve, reject) => {
 
@@ -134,7 +138,9 @@ exports.text_robot = async content => {
             const analyzeParams = {
                 text:text,
                 features: {
-                    keywords: {}
+                    keywords: {
+                        limit:3
+                    }
                 }
             }
 
@@ -158,3 +164,5 @@ exports.text_robot = async content => {
 
 
 }
+
+module.exports = robot

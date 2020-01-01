@@ -6,65 +6,103 @@ const downloader = require('image-downloader')
 
 async function robot(content){
 
-    content.imagesUrl = []
-
-    for(keyword of content.keywords) {
-        content.imagesUrl.push(await getImagesUrl(keyword))
+    for(let session in content.sessions) {
+        content.sessions[session].imagesUrl = []
+        for(let keyword in content.sessions[session].keywords) {
+            content.sessions[session].imagesUrl.push(await getImagesUrl(content.sessions[session].keywords[keyword], 1))
+        }
     }
 
-    async function getImagesUrl(keyword) {
+    const imagesDownloaded = []
+    console.log('> [image-robot] Buscando por imagens...');
+    await downloadImages()
+    await downloadMainImage()
+
+    async function downloadImages() {
+
+        for(let session in content.sessions) { 
+
+            const images = content.sessions[session].imagesUrl
+
+            for(let url in images) {
+
+                try {
+
+                    if(imagesDownloaded.includes(images[url])) {
+                        throw new Error('Imagem Já baixada')
+                    }
+
+                    await download(images[url], content.sessions[session].title)
+                    imagesDownloaded.push(images[url])
+        
+                    console.log(`> [image-robot] Imagem baixada com sucesso: ${images[url]}`)
+                    break
+        
+                }
+                catch(err) {
+                    console.error(`> [image-robot] Erro ao baixar a imagem: ${images[url]} - ${err}`)
+                }
+
+            }
+        }
+
+
+    }
+
+    async function getImagesUrl(keyword, num) {
 
         const response = await customSearch.cse.list({
             key: googleCredentials.apikey,
             cx: googleCredentials.searchEngine,
             q: `${content.searchTerm} ${keyword}`,
             searchType: 'image',
-            num: 1
+            num: num
         })
+        
+        if(num == 1){
+            return response.data.items[0].link
+        }
 
-        return response.data.items[0].link
+        else {
+            const links = []
+            for(let index in response.data.items) {
+                links.push(response.data.items[index].link)
+            }
+            return links
+        }
  
     }
 
-    downloadImages()
-    
+    async function download(url, fileName) {
 
-    async function downloadImages() {
+        await downloader.image({
+            url: url,
+            dest: `${content.searchTerm}/images/${fileName}.png`
+        })
 
-        const imagesDownloaded = []
-        
-        for(i = 0; i < content.imagesUrl.length; i++) {
+    }
+
+    async function downloadMainImage() {
+
+        const images = await getImagesUrl(content.searchTerm, 5)
+
+        for(url in images) {
 
             try {
 
-                if(imagesDownloaded.includes(content.imagesUrl[i])) {
-                    throw new Error('Imagem Já baixada')
+                if(imagesDownloaded.includes(images[url])) {
+                    throw new Error('Imagem já baixada')
                 }
 
-                console.log(`> [image-robot] Baixando imagem referente à palavra chave: ${content.keywords[i]}`)
-                await download(content.imagesUrl[i], `${content.keywords[i]}.png`)
-                imagesDownloaded.push(content.imagesUrl[i])
-
-                console.log(`> [image-robot] Imagem baixada com sucesso: ${content.imagesUrl[i]}`)
+                await download(images[url], `${content.searchTerm} - Main Image`)
+                console.log(`Imagem principal baixada com sucesso: ${images[url]}`)
+                break
 
             }
             catch(err) {
-                console.error(`> [image-robot] Erro ao baixar a imagem: ${content.imagesUrl[i]} - ${err}`)
+                console.log(`> [image-robot] Erro ao  baixar a imagem pricipal (Tentativa ${url + 1} de 5) - ${err}`)
             }
-
         }
-
-
-        async function download(url, fileName) {
-
-            downloader.image({
-                url: url,
-                dest: `${content.searchTerm}/images/${fileName}`
-            })
-
-        }
-
-
     }
 
 

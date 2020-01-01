@@ -10,14 +10,15 @@ async function start() {
     content.searchTerm = userInput.askAndReturnSearchTerm()
     content.language = userInput.askAndReturnLanguage()
 
-    await textRobot.text_robot(content)
-    await imageRobot(content)
+    await textRobot(content)
 
     export_robot.createFolder(content)
     await imageRobot(content)
 
     export_robot.exportDocx(content)
     export_robot.exportJSON(content)
+
+    console.log(content.sessions)
 
 }
 
