@@ -18,7 +18,6 @@ async function start() {
     export_robot.exportDocx(content)
     export_robot.exportJSON(content)
 
-    console.log(content.sessions)
 
 }
 

@@ -1,5 +1,3 @@
-const sbd = require('sbd')
-
 // Algorithmia API
 const algorithmia = require('algorithmia')
 const algorithmiaApiKey = require('../credentials/algorithmia.json').apikey

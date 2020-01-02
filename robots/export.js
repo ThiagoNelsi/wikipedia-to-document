@@ -2,6 +2,7 @@ const docx = require('docx')
 const fs = require('fs')
 
 exports.exportDocx = content => {
+    
     const doc = new docx.Document()
 
     addTitleAndAbstract()
@@ -42,39 +43,49 @@ exports.exportDocx = content => {
     }
 
 
-
     function addMainText() {
 
-        paragraphs = content.sanitizedContent
-
         let finallText = []
+        let mainText = []
+
+        content.sessions.forEach((session) => {
+            const sessionTitle = new docx.TextRun({
+                text: session.title,
+                bold:true,
+                italics: false,
+                size: 36,
+                font: 'Arial'
+            })
+            addParagraph(sessionTitle)
 
 
-        for(let i in paragraphs) {
-            
+            if(session.text.length != 0) {
+                const image = docx.Media.addImage(doc, fs.readFileSync(process.cwd() + `\\${content.searchTerm}\\images\\${session.title}.png`), 550, 300)
+                mainText.push(new docx.Paragraph({
+                    children:[image]
+                }))
+            }
+
+
             const text = new docx.TextRun({
-                text: paragraphs[i],
+                text: session.text,
                 bold: false,
                 italics: false,
                 size: 24,
                 font: 'Arial'
             })
+            addParagraph(text)
+        })
 
-            finallText.push(text)
 
-        }
-
-        let mainText = []
-        for(let i in finallText) {
-
+        function addParagraph(text) {
             mainText.push(new docx.Paragraph({
-                children:[finallText[i]],
+                children:[text],
                 alignment: docx.AlignmentType.JUSTIFIED,
                 spacing: {
                     line: 360
                 }
             }))
-
         }
         
     
@@ -102,16 +113,7 @@ exports.exportDocx = content => {
 
 exports.exportJSON = content => {
 
-    const jsonFileContent = {
-        searchTerm:content.searchTerm,
-        wikipediaOriginalContent:content.sourceContentOriginal,
-        sanitizedContent:content.sanitizedContent,
-        abstract:content.summarizedSourceContent,
-        keywords:content.keywords,
-        imagesUrl: content.imagesUrl
-    }
-
-    const file = JSON.stringify(jsonFileContent)
+    const file = JSON.stringify(content)
 
     return fs.writeFileSync(`${content.searchTerm}/${content.searchTerm}.json`, file)
 
