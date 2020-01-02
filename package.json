@@ -25,5 +25,15 @@
     "readline-sync": "^1.4.10",
     "sbd": "^1.0.16",
     "watson-developer-cloud": "^4.0.1"
+  },
+  "bin":"index.js",
+  "pkg":{
+    "assets":[
+      "robots/**/*",
+      "credentials/**/*"
+    ],
+    "targets":[
+      "node10-win-x86"
+    ]
   }
 }

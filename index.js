@@ -1,3 +1,5 @@
+console.log('Carregando...')
+
 const userInput = require('./robots/user-input.js')
 const textRobot = require('./robots/text-robot.js')
 const imageRobot = require('./robots/image-robot.js')
