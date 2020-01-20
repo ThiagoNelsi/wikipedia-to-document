@@ -1,6 +1,10 @@
 > # Wikipedia Content Getter
 >  This project collects Wikipedia articles from a search term entered by the user and formats the data in a .docx document with images related to each section of the collected article.
 >
+>
+> This project is inspired by the [Video Maker](https://github.com/filipedeschamps/video-maker) project by [FiIipe Deschamps](https://github.com/filipedeschamps)
+>
+>
 > ## APIs
 > All the project is made with NodeJS and uses the following APIs:
 > * [Wikipedia Parser API](https://www.algorithmia.com/algorithms/web/WikipediaParser) (from [Algorithmia](https://www.algorithmia.com/))
@@ -16,6 +20,7 @@
 > * [readline-sync](https://www.npmjs.com/package/readline-sync)
 > * [watson-developer-cloud](https://www.npmjs.com/package/watson-developer-cloud)
 >
+> ## How to use
 > You can use this app by running the index.js file and typing a search term, after this you just need to select a language and wait for the app end the process.
 >
 > At the end of the process a folder will be created at the root of the project with the same name as the search term containing the .docx document and a folder with the images.
