@@ -2,7 +2,7 @@
 >  This project collects Wikipedia articles from a search term entered by the user and formats the data in a .docx document with images related to each section of the collected article.
 >
 >
-> This project is inspired by the [Video Maker](https://github.com/filipedeschamps/video-maker) project by [FiIipe Deschamps](https://github.com/filipedeschamps)
+> This project is inspired by the [Video Maker](https://github.com/filipedeschamps/video-maker) project by [Filipe Deschamps](https://github.com/filipedeschamps)
 >
 >
 > ## APIs
