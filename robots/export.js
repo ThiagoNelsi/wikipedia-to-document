@@ -48,19 +48,19 @@ exports.exportDocx = content => {
         let finallText = []
         let mainText = []
 
-        content.sessions.forEach((session) => {
-            const sessionTitle = new docx.TextRun({
-                text: session.title,
+        content.section.forEach((section) => {
+            const sectionTitle = new docx.TextRun({
+                text: section.title,
                 bold:true,
                 italics: false,
                 size: 36,
                 font: 'Arial'
             })
-            addParagraph(sessionTitle)
+            addParagraph(sectionTitle)
 
 
-            if(session.text.length != 0) {
-                const image = docx.Media.addImage(doc, fs.readFileSync(process.cwd() + `\\${content.searchTerm}\\images\\${session.title}.png`), 550, 300)
+            if(section.text.length != 0) {
+                const image = docx.Media.addImage(doc, fs.readFileSync(process.cwd() + `\\${content.searchTerm}\\images\\${section.title}.png`), 550, 300)
                 mainText.push(new docx.Paragraph({
                     children:[image]
                 }))
@@ -68,7 +68,7 @@ exports.exportDocx = content => {
 
 
             const text = new docx.TextRun({
-                text: session.text,
+                text: section.text,
                 bold: false,
                 italics: false,
                 size: 24,

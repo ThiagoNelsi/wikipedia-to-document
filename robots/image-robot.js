@@ -6,10 +6,10 @@ const downloader = require('image-downloader')
 
 async function robot(content){
 
-    for(let session in content.sessions) {
-        content.sessions[session].imagesUrl = []
-        for(let keyword in content.sessions[session].keywords) {
-            content.sessions[session].imagesUrl.push(await getImagesUrl(content.sessions[session].keywords[keyword], 1))
+    for(let section in content.sections) {
+        content.sections[section].imagesUrl = []
+        for(let keyword in content.sections[section].keywords) {
+            content.sections[section].imagesUrl.push(await getImagesUrl(content.sections[section].keywords[keyword], 1))
         }
     }
 
@@ -20,9 +20,9 @@ async function robot(content){
 
     async function downloadImages() {
 
-        for(let session in content.sessions) { 
+        for(let section in content.sections) { 
 
-            const images = content.sessions[session].imagesUrl
+            const images = content.sections[section].imagesUrl
 
             for(let url in images) {
 
@@ -32,7 +32,7 @@ async function robot(content){
                         throw new Error('Imagem Já baixada')
                     }
 
-                    await download(images[url], content.sessions[session].title)
+                    await download(images[url], content.sections[section].title)
                     imagesDownloaded.push(images[url])
         
                     console.log(`> [image-robot] Imagem baixada com sucesso: ${images[url]}`)

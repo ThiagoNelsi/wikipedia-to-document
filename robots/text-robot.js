@@ -17,16 +17,16 @@ async function robot(content) {
     console.log('> [text-robot] Limpando conteúdo...')
     sanitizeWikipediaContent(content)
 
-    console.log('> [text-robot] Quebrando texto em sessões...')
-    breakContentIntoSessions(content)
+    console.log('> [text-robot] Quebrando texto em seções...')
+    breakContentIntoSections(content)
 
     console.log('> [text-robot] Resumindo conteúdo')
     await summarizeAllContent(content)
 
 
     console.log('> [text-robot] Identificando palavras-chave...')
-    for(let session in content.sessions) {
-        content.sessions[session].keywords = await getKeywordsFromTheText(content.sessions[session].text)
+    for(let section in content.sections) {
+        content.sections[section].keywords = await getKeywordsFromTheText(content.sections[section].text)
     }
 
 
@@ -47,33 +47,33 @@ async function robot(content) {
     }
 
 
-    function breakContentIntoSessions(content) {
+    function breakContentIntoSections(content) {
 
-        content.sessions = []
+        content.sections = []
         content.lines = removeBlankLines(content.sourceContentOriginal.split('\n'))
         
     
         for(let i = 0; i < content.lines.length; i++) {
     
             var j = i + 1
-            let session = []
+            let section = []
     
             if(content.lines[i].trim()[0] === '=') {
     
-                session = {
+                section = {
                     title:removeMarkdowns([content.lines[i].trim()]).join(),
                     text:[]
                 }
                 
                 while(j < content.lines.length && content.lines[j].trim()[0] != '=') {
     
-                    session.text.push(content.lines[j].trim())
+                    section.text.push(content.lines[j].trim())
                     j++ 
                     
                 }
     
-                session.text = session.text.join('\n')
-                content.sessions.push(session)
+                section.text = section.text.join('\n')
+                content.sections.push(section)
     
             }
     
