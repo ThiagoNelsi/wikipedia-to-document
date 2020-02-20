@@ -6,20 +6,19 @@ const imageRobot = require('./robots/image-robot.js')
 const export_robot = require('./robots/export.js')
 
 async function start() {
-    
-    const content = {}
 
-    content.searchTerm = userInput.askAndReturnSearchTerm()
-    content.language = userInput.askAndReturnLanguage()
+  const content = {}
 
-    await textRobot(content)
+  content.searchTerm = userInput.askAndReturnSearchTerm()
+  content.language = userInput.askAndReturnLanguage()
 
-    export_robot.createFolder(content)
-    await imageRobot(content)
+  await textRobot(content)
 
-    export_robot.exportDocx(content)
-    export_robot.exportJSON(content)
+  export_robot.createFolder(content)
+  await imageRobot(content)
 
+  export_robot.exportDocx(content)
+  export_robot.exportJSON(content)
 
 }
 
