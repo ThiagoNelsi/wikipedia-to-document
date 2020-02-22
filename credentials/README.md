@@ -16,4 +16,4 @@
 > }
 > ```
 >
-> *This is a fake key, you need to get your own API KEY at the Algorithmia site.
+> *This is a fake key, you need to get your own API KEYS at the Algorithmia site and other platforms.
