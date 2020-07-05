@@ -1,5 +1,6 @@
 const docx = require('docx')
 const fs = require('fs')
+const path = require('path')
 
 exports.exportDocx = content => {
 
@@ -26,7 +27,6 @@ exports.exportDocx = content => {
       text: content.summarizedSourceContent,
       bold: true,
       italics: true,
-      font: 'Calibri',
       size: 20
 
     })
@@ -53,25 +53,21 @@ exports.exportDocx = content => {
         bold: true,
         italics: false,
         size: 36,
-        font: 'Arial'
       })
       addParagraph(sectionTitle)
 
-
       if (section.text.length != 0) {
-        const image = docx.Media.addImage(doc, fs.readFileSync(process.cwd() + `\\${content.searchTerm}\\images\\${section.title}.png`), 550, 300)
+        const image = docx.Media.addImage(doc, fs.readFileSync(path.join(__dirname, `../${content.searchTerm}/images/${section.title}.png`)), 550, 300)
         mainText.push(new docx.Paragraph({
           children: [image]
         }))
       }
-
 
       const text = new docx.TextRun({
         text: section.text,
         bold: false,
         italics: false,
         size: 24,
-        font: 'Arial'
       })
       addParagraph(text)
     })
@@ -120,13 +116,13 @@ exports.exportJSON = content => {
 
 exports.createFolder = content => {
 
-  fs.mkdirSync(process.cwd() + `..\\${content.searchTerm}`, { recursive: true }, (err) => {
+  fs.mkdirSync(path.join(__dirname, `../${content.searchTerm}`), { recursive: true }, (err) => {
     if (err) {
       console.error(err);
     }
   })
 
-  fs.mkdirSync(process.cwd() + `\\${content.searchTerm}\\images`, { recursive: true }, (err) => {
+  fs.mkdirSync(path.join(__dirname, `../${content.searchTerm}/images`), { recursive: true }, (err) => {
     if (err) {
       console.error(err);
     }
