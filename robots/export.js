@@ -45,10 +45,9 @@ exports.exportDocx = content => {
 
   function addMainText() {
 
-    let finallText = []
     let mainText = []
 
-    content.section.forEach((section) => {
+    content.sections.forEach((section) => {
       const sectionTitle = new docx.TextRun({
         text: section.title,
         bold: true,
