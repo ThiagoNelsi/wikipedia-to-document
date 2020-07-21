@@ -128,7 +128,7 @@ async function robot(content) {
     return new Promise((resolve, reject) => {
 
       if (text.length === 0) {
-        resolve('')
+        resolve([])
       }
 
       const analyzeParams = {

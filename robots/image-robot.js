@@ -6,12 +6,12 @@ const downloader = require('image-downloader')
 
 async function robot(content) {
 
-  for (let section in content.sections) {
-    content.sections[section].imagesUrl = []
-    for (let keyword in content.sections[section].keywords) {
-      content.sections[section].imagesUrl.push(await getImagesUrl(content.sections[section].keywords[keyword], 1))
-    }
-  }
+  await Promise.all(content.sections.map(section => {
+    section.imagesUrl = []
+    return Promise.all(section.keywords.map(keyword => {
+      return getImagesUrl(keyword, 1).then(imageUrl => section.imagesUrl.push(imageUrl))
+    }))
+  }))
 
   const imagesDownloaded = []
   console.log('> [image-robot] Buscando por imagens...');
@@ -20,33 +20,33 @@ async function robot(content) {
 
   async function downloadImages() {
 
-    for (let section in content.sections) {
+    await Promise.all(content.sections.map(section => {
 
-      const images = content.sections[section].imagesUrl
+      const URLs = section.imagesUrl
 
-      for (let url in images) {
+      return new Promise(async resolve => {
+        for (let url of URLs) {
 
-        try {
+          try {
 
-          if (imagesDownloaded.includes(images[url])) {
-            throw new Error('Imagem Já baixada')
+            if (imagesDownloaded.includes(url)) {
+              throw new Error('Imagem Já baixada')
+            }
+
+            await download(url, section.title)
+            imagesDownloaded.push(url)
+
+            console.log(`> [image-robot] Imagem baixada com sucesso - ${section.title}: ${url}`)
+            break
+
           }
-
-          await download(images[url], content.sections[section].title)
-          imagesDownloaded.push(images[url])
-
-          console.log(`> [image-robot] Imagem baixada com sucesso: ${images[url]}`)
-          break
-
+          catch (err) {
+            console.error(`> [image-robot] Erro ao baixar a imagem: ${url} - ${err}`)
+          }
         }
-        catch (err) {
-          console.error(`> [image-robot] Erro ao baixar a imagem: ${images[url]} - ${err}`)
-        }
-
-      }
-    }
-
-
+        resolve()
+      })
+    }))
   }
 
   async function getImagesUrl(keyword, num) {
@@ -54,7 +54,7 @@ async function robot(content) {
     const response = await customSearch.cse.list({
       key: googleCredentials.apikey,
       cx: googleCredentials.searchEngine,
-      q: `${content.searchTerm} ${keyword}`,
+      q: `${keyword} "${content.searchTerm}"`,
       searchType: 'image',
       num: num
     })
