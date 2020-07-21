@@ -1,7 +1,7 @@
 // Algorithmia API
 const algorithmia = require('algorithmia')
 const algorithmiaApiKey = require('../credentials/algorithmia.json').apikey
-const algorithmiaAutenticated = algorithmia(algorithmiaApiKey)     // Retorna um instancia autenticada da API
+const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey)     // Retorna um instancia autenticada da API
 
 // Natural Language Understanding API
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
@@ -32,7 +32,7 @@ async function robot(content) {
 
   async function fetchWikipediaContent(content) {
 
-    const wikipediaAlgorithm = algorithmiaAutenticated.algo('web/WikipediaParser/0.1.2')
+    const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2')
     const wikipediaResponse = await wikipediaAlgorithm.pipe({ "articleName": content.searchTerm, "lang": content.language })
     const wikipediaContent = wikipediaResponse.get()
 
@@ -106,7 +106,7 @@ async function robot(content) {
 
     const text = content.sanitizedContent.join('\n')
 
-    const summarizerAlgorithm = algorithmiaAutenticated.algo('nlp/Summarizer/0.1.8')
+    const summarizerAlgorithm = algorithmiaAuthenticated.algo('nlp/Summarizer/0.1.8')
     const summarizerAlgorithmResponse = await summarizerAlgorithm.pipe(text)
     const summarizedContent = summarizerAlgorithmResponse.get()
 

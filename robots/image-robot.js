@@ -100,7 +100,7 @@ async function robot(content) {
 
       }
       catch (err) {
-        console.log(`> [image-robot] Erro ao  baixar a imagem pricipal (Tentativa ${url + 1} de 5) - ${err}`)
+        console.log(`> [image-robot] Erro ao  baixar a imagem principal (Tentativa ${url + 1} de 5) - ${err}`)
       }
     }
   }
