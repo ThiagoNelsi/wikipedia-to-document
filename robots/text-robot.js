@@ -4,9 +4,16 @@ const algorithmiaApiKey = require('../credentials/algorithmia.json').apikey
 const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey)     // Retorna um instancia autenticada da API
 
 // Natural Language Understanding API
-const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
-const { IamAuthenticator } = require('ibm-watson/auth');
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1')
+const { IamAuthenticator } = require('ibm-watson/auth')
 const nluCredentials = require('../credentials/nlu-watson.json')
+const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
+  version: "2019-07-12",
+  authenticator: new IamAuthenticator({
+    apikey: nluCredentials.apikey
+  }),
+  url: nluCredentials.url
+})
 
 
 async function robot(content) {
@@ -25,9 +32,9 @@ async function robot(content) {
 
 
   console.log('> [text-robot] Identificando palavras-chave...')
-  for (let section in content.sections) {
-    content.sections[section].keywords = await getKeywordsFromTheText(content.sections[section].text)
-  }
+  await Promise.all(content.sections.map(section => {
+    return getKeywordsFromTheText(section.text).then(keywords => section.keywords = keywords)
+  }))
 
 
   async function fetchWikipediaContent(content) {
@@ -118,20 +125,11 @@ async function robot(content) {
 
   function getKeywordsFromTheText(text) {
 
-    if (text.length === 0) {
-      return ''
-    }
-
     return new Promise((resolve, reject) => {
 
-
-      const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
-        version: "2019-07-12",
-        authenticator: new IamAuthenticator({
-          apikey: nluCredentials.apikey
-        }),
-        url: nluCredentials.url
-      })
+      if (text.length === 0) {
+        resolve('')
+      }
 
       const analyzeParams = {
         text: text,
